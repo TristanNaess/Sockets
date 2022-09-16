@@ -32,8 +32,6 @@ class SocketPoller;
 class BaseSocket
 {
     public:
-        std::string info_string() const;
-
         int get_fd() const;
         void set_poller(SocketPoller* poller, int index); // poller passes self
         void remove_poller();
@@ -58,8 +56,8 @@ class Socket : public BaseSocket
         Socket();
         Socket(const std::string& ip, int port_no); // client constructor
         Socket(int fd, struct sockaddr_in& addr);   // server constructor called by PublicSocket::accept()
-        Socket(const Socket& other) = delete;
-        Socket& operator=(const Socket& other) = delete;
+        Socket(const Socket&) = delete;
+        Socket& operator=(const Socket&) = delete;
         Socket(Socket&& other);
         Socket& operator=(Socket&& other);
         
@@ -75,6 +73,11 @@ class PublicSocket : public BaseSocket
 {
     public:
         PublicSocket(int port_no);
+        PublicSocket(const PublicSocket&) = delete;
+        PublicSocket& operator=(const PublicSocket&) = delete;
+        PublicSocket(PublicSocket&& other);
+        PublicSocket& operator=(PublicSocket&& other);
+
         ~PublicSocket();
 
         Socket accept();

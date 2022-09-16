@@ -36,11 +36,6 @@ bool is_legal_portno(int port)
 
 // ============= BaseSocket ============= 
 
-std::string BaseSocket::info_string() const
-{
-    return "TODO";
-}
-
 int BaseSocket::get_fd() const
 {
     return m_fd;
@@ -217,6 +212,27 @@ PublicSocket::PublicSocket(int port_no)
     {
         throw std::runtime_error("Error opening socket");
     }
+}
+
+PublicSocket::PublicSocket(PublicSocket&& other)
+{
+    m_fd = other.m_fd;
+    m_addr = other.m_addr;
+    m_poller = other.m_poller;
+    m_poller_index = other.m_poller_index;
+    
+    other.m_fd = -1;
+}
+
+PublicSocket& PublicSocket::operator=(PublicSocket&& other)
+{
+    m_fd = other.m_fd;
+    m_addr = other.m_addr;
+    m_poller = other.m_poller;
+    m_poller_index = other.m_poller_index;
+    
+    other.m_fd = -1;
+    return *this;
 }
 
 PublicSocket::~PublicSocket()
